@@ -1,0 +1,47 @@
+# GitLab CI for omnetic-jwt-generator-csharp.
+#
+# Mirrors the Makefile quality gates (test + format-check) on the pinned .NET 8
+# SDK image. `dotnet test` restores + builds first, and because the build treats
+# compiler warnings as errors (Directory.Build.props), it also gates on compiler
+# warnings (CA analyzers stay advisory by design). Both example projects are in the
+# solution, so they are compiled and style-checked by these jobs too.
+
+stages:
+  - quality
+
+default:
+  image: mcr.microsoft.com/dotnet/sdk:8.0
+
+variables:
+  DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+  DOTNET_NOLOGO: "1"
+  NUGET_PACKAGES: "$CI_PROJECT_DIR/.nuget/packages"
+
+# Run on merge requests, the default branch, and tags — while avoiding a
+# duplicate pipeline when a branch already has an open merge request.
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_TAG
+
+# Cache restored packages across jobs, keyed on the project files. GitLab caps
+# cache:key:files at two paths, and the example projects hold no PackageReference,
+# so they contribute nothing to the restore graph and are deliberately not keys.
+cache:
+  key:
+    files:
+      - src/Omnetic.JwtGenerator/Omnetic.JwtGenerator.csproj
+      - tests/Omnetic.JwtGenerator.Tests/Omnetic.JwtGenerator.Tests.csproj
+  paths:
+    - .nuget/packages/
+
+test:
+  stage: quality
+  script:
+    - dotnet test --configuration Release
+
+format-check:
+  stage: quality
+  script:
+    - dotnet format --verify-no-changes

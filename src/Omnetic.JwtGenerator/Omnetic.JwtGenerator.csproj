@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <PackageId>Omnetic.JwtGenerator</PackageId>
+    <Description>Generate signed RS256 JWT tokens for authenticating Omnetic DMS Service Account requests.</Description>
+  </PropertyGroup>
+
+</Project>
