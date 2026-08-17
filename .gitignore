@@ -1,0 +1,9 @@
+[Bb]in/
+[Oo]bj/
+.vs/
+*.user
+artifacts/
+.nuget/
+# The examples need the key inside the repo to be visible in the mounted container.
+*.pem
+.claude/settings.local.json

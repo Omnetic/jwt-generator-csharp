@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Omnetic.JwtGenerator.Examples.GenerateToken</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <!-- Built by solution-level `dotnet test`, but skipped when collecting tests. -->
+    <IsTestProject>false</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../src/Omnetic.JwtGenerator/Omnetic.JwtGenerator.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Lets the test suite drive Main directly, so the example needs no public surface. -->
+    <InternalsVisibleTo Include="Omnetic.JwtGenerator.Tests" />
+  </ItemGroup>
+
+</Project>
